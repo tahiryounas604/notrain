@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "notrain"
+version = "0.1.0"
+description = "AI crawler control + monitoring: check, generate, verify and monitor robots.txt policy for AI crawlers."
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Tahir Younas" }]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+notrain = "notrain.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
