@@ -1,0 +1,36 @@
+name: Temp Unzip
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip product and stage ci.yml at root
+        run: |
+          set -e
+          test -f notrain.zip
+          unzip -o notrain.zip
+          mv notrain/.github/workflows/ci.yml ./ci.yml
+          rm -rf notrain/.github
+          mv notrain/* .
+          rmdir notrain
+          echo "Files after unzip:"
+          find . -type f -not -path './.git/*' | sort
+      - name: Commit unzipped files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status --porcelain
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Unzip notrain product files (ci.yml staged at root)"
+            git push
+          fi
